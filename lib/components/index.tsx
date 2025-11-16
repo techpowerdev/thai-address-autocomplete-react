@@ -1,7 +1,7 @@
 import { AutoComplete, AutoCompleteProps } from "antd";
 import { DefaultOptionType } from "antd/es/select";
 import CSS from "csstype";
-import { ReactNode, useState } from "react";
+import { JSX, useState } from "react";
 
 import { Address, Config, ThaiAddressFinder } from "../logic";
 
@@ -45,7 +45,7 @@ export const CreateInput = (config?: Config) => {
     style = DefaultProps.style,
     className = DefaultProps.className,
     autoCompleteProps = DefaultProps.autoCompleteProps,
-  }: Props = DefaultProps): React.ReactNode => {
+  }: Props = DefaultProps): JSX.Element => {
     const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
     const findAndFilter = (txt: string) => {
@@ -110,16 +110,16 @@ export const CreateInput = (config?: Config) => {
 
   // return with sub components (by scope)
   return {
-    District: (props: Props = DefaultProps): ReactNode => (
+    District: (props: Props = DefaultProps): JSX.Element => (
       <InputThaiAddress {...props} scope="district" />
     ),
-    Amphoe: (props: Props = DefaultProps): ReactNode => (
+    Amphoe: (props: Props = DefaultProps): JSX.Element => (
       <InputThaiAddress {...props} scope="amphoe" />
     ),
-    Province: (props: Props = DefaultProps): ReactNode => (
+    Province: (props: Props = DefaultProps): JSX.Element => (
       <InputThaiAddress {...props} scope="province" />
     ),
-    Zipcode: (props: Props = DefaultProps): ReactNode => (
+    Zipcode: (props: Props = DefaultProps): JSX.Element => (
       <InputThaiAddress {...props} scope="zipcode" />
     ),
   };
