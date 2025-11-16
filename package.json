@@ -22,7 +22,8 @@
     "example-lint": "cd ./example && yarn run lint",
     "example-initial": "yarn install && yarn run build",
     "example-build": "cd ./example && yarn install && yarn run build",
-    "example-preview": "cd ./example && yarn preview"
+    "example-preview": "cd ./example && yarn preview",
+    "prepare": "npm run build"
   },
   "dependencies": {
     "antd": "^5.27.3"
