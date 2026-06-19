@@ -1,0 +1,54 @@
+name: Build and Publish Dist Branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-dist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack (Yarn)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+
+      - name: Verify dist exists
+        run: |
+          test -f dist/main.js || (echo "Build failed: dist/main.js missing" && exit 1)
+          test -f dist/main.d.ts || (echo "Build failed: dist/main.d.ts missing" && exit 1)
+
+      - name: Push to dist branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          SHORT_SHA=$(git rev-parse --short HEAD)
+
+          git checkout --orphan dist-tmp
+          git rm -rf --cached . > /dev/null
+
+          git add -f dist package.json README.md LICENSE 2>/dev/null || git add -f dist package.json README.md
+
+          git commit -m "chore: build dist from main@${SHORT_SHA} [skip ci]"
+          git branch -D dist 2>/dev/null || true
+          git branch -m dist
+          git push -f origin dist
